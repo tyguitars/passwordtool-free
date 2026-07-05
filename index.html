@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>パスワード生成フリー | 安全なパスワードを無料作成</title>
+<meta name="description" content="安全でランダムなパスワードをワンクリック生成。無料・登録不要。">
+<link rel="canonical" href="https://passwordtool-free.vercel.app/">
+<style>
+:root{--primary:#6C5CE7;--bg:#0f0f13;--card:#1a1a24;--border:#2a2a3a;--text:#e8e8f0;--muted:#888899;--success:#4ade80;--danger:#f87171}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Hiragino Kaku Gothic ProN",sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+header{background:linear-gradient(135deg,#6C5CE7,#00B4D8);padding:40px 20px 30px;text-align:center}
+header h1{font-size:2rem;font-weight:800}header p{margin-top:8px;opacity:.9}
+nav{background:var(--card);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+nav a{color:var(--muted);text-decoration:none;font-size:.85rem;padding:4px 12px;border-radius:20px;border:1px solid var(--border)}
+nav a:hover{color:var(--primary);border-color:var(--primary)}
+.container{max-width:900px;margin:0 auto;padding:30px 20px}
+.pw-display{display:flex;gap:10px;margin-bottom:24px}
+.pw-display input{flex:1;background:var(--card);border:1px solid var(--border);border-radius:12px;color:var(--text);padding:20px;font-size:1.3rem;font-family:monospace;outline:none;letter-spacing:1px}
+.pw-display input:focus{border-color:var(--primary)}
+.btn{background:var(--primary);color:#fff;border:none;border-radius:12px;padding:0 22px;font-size:1rem;font-weight:700;cursor:pointer;transition:opacity .2s}
+.btn:hover{opacity:.85}
+.btn.secondary{background:var(--card);border:1px solid var(--border);color:var(--text)}
+.strength-bar{height:8px;border-radius:4px;background:var(--border);margin-bottom:24px;overflow:hidden}
+.strength-fill{height:100%;width:0%;transition:all .3s;border-radius:4px}
+.strength-label{font-size:.85rem;color:var(--muted);margin-bottom:24px;text-align:right}
+.options{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:24px}
+.option-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)}
+.option-row:last-child{border-bottom:none}
+.option-row label{cursor:pointer;font-size:.95rem}
+.length-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0 20px;border-bottom:1px solid var(--border);margin-bottom:8px}
+.length-row input[type=range]{flex:1;margin:0 16px;accent-color:var(--primary)}
+.length-val{font-family:monospace;font-size:1.2rem;font-weight:700;color:var(--primary);min-width:36px;text-align:center}
+.switch{position:relative;width:46px;height:26px}
+.switch input{opacity:0;width:0;height:0}
+.slider-toggle{position:absolute;cursor:pointer;inset:0;background:var(--border);border-radius:26px;transition:.2s}
+.slider-toggle:before{content:"";position:absolute;height:20px;width:20px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.2s}
+input:checked+.slider-toggle{background:var(--primary)}
+input:checked+.slider-toggle:before{transform:translateX(20px)}
+.generate-btn{width:100%;background:linear-gradient(135deg,#6C5CE7,#00B4D8);color:#fff;border:none;border-radius:14px;padding:18px;font-size:1.1rem;font-weight:800;cursor:pointer;margin-bottom:24px}
+.generate-btn:hover{opacity:.9}
+.history-section{margin-top:24px}.history-section h2{font-size:1rem;color:var(--muted);margin-bottom:14px}
+.history-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 16px;font-family:monospace;margin-bottom:8px;cursor:pointer;display:flex;justify-content:space-between}
+.history-item:hover{border-color:var(--primary)}
+.faq{margin-top:40px;padding-top:30px;border-top:1px solid var(--border)}
+.faq h2{font-size:1.1rem;margin-bottom:16px}
+.faq details{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 18px;margin-bottom:10px}
+.faq summary{cursor:pointer;font-weight:600}
+.faq p{margin-top:10px;color:var(--muted);font-size:.9rem;line-height:1.6}
+.related-tools{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:30px;padding-top:30px;border-top:1px solid var(--border)}
+.tool-link{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;text-decoration:none;color:var(--text)}
+.tool-link:hover{border-color:var(--primary)}.tool-link .icon{font-size:1.5rem;display:block;margin-bottom:6px}.tool-link .name{font-size:.8rem;color:var(--muted)}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--success);color:#000;padding:12px 20px;border-radius:8px;font-weight:600;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999}
+.toast.show{opacity:1}
+footer{text-align:center;padding:30px 20px;color:var(--muted);font-size:.8rem;border-top:1px solid var(--border);margin-top:40px}
+</style></head><body>
+<header><h1>🔐 パスワード生成フリー</h1>
+<p>安全なランダムパスワードをワンクリック生成。無料・登録不要・すべてブラウザ内で処理。</p></header>
+<nav>
+<a href="https://qrtool-topaz.vercel.app">QRコード</a>
+<a href="https://texttool-eight.vercel.app">テキスト変換</a>
+<a href="https://jsonfree.vercel.app">JSON整形</a>
+<a href="https://colortool-nine.vercel.app">カラー変換</a>
+<a href="https://shindan-shirakokun.vercel.app">性格診断</a>
+</nav>
+<div class="container">
+<div class="pw-display">
+<input type="text" id="pwOut" readonly value="">
+<button class="btn" onclick="copyPw()">コピー</button>
+<button class="btn secondary" onclick="generate()">再生成</button>
+</div>
+<div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+<div class="strength-label" id="strengthLabel">強度: -</div>
+<div class="options">
+<div class="length-row">
+<label>文字数</label>
+<input type="range" id="lenRange" min="4" max="64" value="16" oninput="onLenChange(this.value)">
+<div class="length-val" id="lenVal">16</div>
+</div>
+<div class="option-row"><label for="optUpper">大文字を含む（A-Z）</label>
+<div class="switch"><input type="checkbox" id="optUpper" checked onchange="generate()"><span class="slider-toggle"></span></div></div>
+<div class="option-row"><label for="optLower">小文字を含む（a-z）</label>
+<div class="switch"><input type="checkbox" id="optLower" checked onchange="generate()"><span class="slider-toggle"></span></div></div>
+<div class="option-row"><label for="optNumber">数字を含む（0-9）</label>
+<div class="switch"><input type="checkbox" id="optNumber" checked onchange="generate()"><span class="slider-toggle"></span></div></div>
+<div class="option-row"><label for="optSymbol">記号を含む</label>
+<div class="switch"><input type="checkbox" id="optSymbol" checked onchange="generate()"><span class="slider-toggle"></span></div></div>
+<div class="option-row"><label for="optAmbiguous">紛らわしい文字を除外（0 O 1 l I）</label>
+<div class="switch"><input type="checkbox" id="optAmbiguous" onchange="generate()"><span class="slider-toggle"></span></div></div>
+</div>
+<button class="generate-btn" onclick="generate()">🎲 新しいパスワードを生成</button>
+<div class="history-section"><h2>🕓 生成履歴（直近5件）</h2><div id="historyList"></div></div>
+<div class="faq">
+<h2>よくある質問</h2>
+<details><summary>パスワードはサーバーに送信されますか？</summary><p>いいえ。このツールはすべてブラウザ内のJavaScriptで完結しており、生成したパスワードが外部サーバーに送信されることは一切ありません。</p></details>
+<details><summary>安全なパスワードの条件は？</summary><p>一般に12文字以上、大文字・小文字・数字・記号を組み合わせたランダムな文字列が安全とされています。</p></details>
+<details><summary>生成履歴は保存されますか？</summary><p>履歴はブラウザのメモリ上にのみ一時保存され、ページを閉じたり再読み込みすると消えます。</p></details>
+</div>
+<div class="related-tools">
+<a class="tool-link" href="https://qrtool-topaz.vercel.app"><span class="icon">📱</span><span class="name">QRコード生成</span></a>
+<a class="tool-link" href="https://texttool-eight.vercel.app"><span class="icon">🔤</span><span class="name">テキスト変換</span></a>
+<a class="tool-link" href="https://jsonfree.vercel.app"><span class="icon">📋</span><span class="name">JSON整形</span></a>
+<a class="tool-link" href="https://colortool-nine.vercel.app"><span class="icon">🎨</span><span class="name">カラー変換</span></a>
+<a class="tool-link" href="https://shindan-shirakokun.vercel.app"><span class="icon">🐣</span><span class="name">性格診断</span></a>
+</div>
+</div>
+<footer>&copy; 2026 パスワード生成フリー | しらこくん製作</footer>
+<div class="toast" id="toast"></div>
+<script>
+var UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+var LOWER = "abcdefghijklmnopqrstuvwxyz";
+var NUMBER = "0123456789";
+var SYMBOL = "!@#%^&*()_-+=<>?";
+var AMBIGUOUS = "0O1lI";
+var history = [];
+function onLenChange(v) { document.getElementById("lenVal").textContent = v; generate(); }
+function randInt(max) { var arr = new Uint32Array(1); crypto.getRandomValues(arr); return arr[0] % max; }
+function generate() {
+  var len = parseInt(document.getElementById("lenRange").value, 10);
+  var useUpper = document.getElementById("optUpper").checked;
+  var useLower = document.getElementById("optLower").checked;
+  var useNumber = document.getElementById("optNumber").checked;
+  var useSymbol = document.getElementById("optSymbol").checked;
+  var excludeAmbiguous = document.getElementById("optAmbiguous").checked;
+  var pool = "";
+  if (useUpper) pool += UPPER;
+  if (useLower) pool += LOWER;
+  if (useNumber) pool += NUMBER;
+  if (useSymbol) pool += SYMBOL;
+  if (!pool) { document.getElementById("optLower").checked = true; pool = LOWER; }
+  if (excludeAmbiguous) {
+    var filtered = "";
+    for (var j = 0; j < pool.length; j++) { if (AMBIGUOUS.indexOf(pool[j]) === -1) filtered += pool[j]; }
+    pool = filtered;
+  }
+  var pw = "";
+  for (var i = 0; i < len; i++) { pw += pool[randInt(pool.length)]; }
+  document.getElementById("pwOut").value = pw;
+  updateStrength(pw, len, useUpper, useLower, useNumber, useSymbol);
+  history.unshift(pw);
+  if (history.length > 5) history.pop();
+  renderHistory();
+}
+function updateStrength(pw, len, u, l, n, s2) {
+  var variety = 0; if (u) variety++; if (l) variety++; if (n) variety++; if (s2) variety++;
+  var score = len * variety;
+  var fill = document.getElementById("strengthFill");
+  var label = document.getElementById("strengthLabel");
+  var text, color, pct;
+  if (score < 40) { text = "弱い"; color = "var(--danger)"; pct = 30; }
+  else if (score < 70) { text = "普通"; color = "#fbbf24"; pct = 60; }
+  else { text = "強い"; color = "var(--success)"; pct = 100; }
+  fill.style.width = pct + "%"; fill.style.background = color;
+  label.textContent = "強度: " + text;
+}
+function renderHistory() {
+  var el = document.getElementById("historyList");
+  el.innerHTML = "";
+  for (var i = 0; i < history.length; i++) {
+    var pw = history[i];
+    var item = document.createElement("div");
+    item.className = "history-item";
+    item.onclick = (function (val) { return function () { useHistory(val); }; })(pw);
+    var span1 = document.createElement("span"); span1.textContent = pw;
+    var span2 = document.createElement("span"); span2.style.color = "var(--muted)"; span2.style.fontSize = ".8rem"; span2.textContent = "クリックで復元";
+    item.appendChild(span1); item.appendChild(span2);
+    el.appendChild(item);
+  }
+}
+function useHistory(pw) { document.getElementById("pwOut").value = pw; showToast("復元しました"); }
+function copyPw() {
+  var val = document.getElementById("pwOut").value;
+  if (!val) return;
+  navigator.clipboard.writeText(val).then(function () { showToast("コピーしました"); });
+}
+function showToast(msg) {
+  var t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("show");
+  setTimeout(function () { t.classList.remove("show"); }, 1500);
+}
+generate();
+</script>
+</body></html>
